@@ -21,15 +21,15 @@ void MainMenuScreen::LoadContent(ResourceManager& resourceManager)
 	m_texturePosition = Game::GetScreenCenter() - Vector2::UNIT_Y * 150;
 
 	// Create the menu items
-	const int COUNT = 2;
+	const int COUNT = 3;
 	MenuItem *pItem;
 	Font::SetLoadSize(20, true);
-	Font *pFont = resourceManager.Load<Font>("Fonts\\arial.ttf");
+	Font *pFont = resourceManager.Load<Font>("Fonts\\Ethnocentric.ttf");
 
 	SetDisplayCount(COUNT);
 
-	enum Items { START_GAME, QUIT };
-	std::string text[COUNT] = { "Start Game", "Quit" };
+	enum Items { START_LEVEL_1, START_LEVEL_2, QUIT };
+	std::string text[COUNT] = { "Start Level 1", "Start Level 2", "Quit" };
 
 	for (int i = 0; i < COUNT; i++)
 	{
@@ -43,10 +43,18 @@ void MainMenuScreen::LoadContent(ResourceManager& resourceManager)
 
 	// when "Start Game" is selected, replace the "SetRemoveCallback" delegate
 	// so that it doesn't quit the game (originally set in the constructor)
-	GetMenuItem(START_GAME)->SetOnSelect([this](){
+	GetMenuItem(START_LEVEL_1)->SetOnSelect([this](){
 		SetOnRemove([this](){ AddScreen(new GameplayScreen()); });
 		Exit();
 	});
+	GetMenuItem(START_LEVEL_2)->SetOnSelect([this]() {
+		SetOnRemove([this]() { AddScreen(new GameplayScreen(1)); });
+	Exit();
+		});
+	GetMenuItem(QUIT)->SetOnSelect([this]() {
+		SetOnRemove([this]() { AddScreen(new GameplayScreen(2)); });
+	Exit();
+		});
 
 	// bind the Exit method to the quit menu item
 	GetMenuItem(QUIT)->SetOnSelect(std::bind(&MainMenuScreen::Exit, this));
@@ -62,7 +70,7 @@ void MainMenuScreen::Update(const GameTime& gameTime)
 	{
 		pItem->SetAlpha(alpha);
 		isSelected = pItem->IsSelected();
-		pItem->SetColor(isSelected ? Color::WHITE : Color::BLUE);
+		pItem->SetColor(isSelected ? Color::GREENYELLOW : Color::YELLOW);
 		pItem->SetTextOffset(isSelected ? Vector2::UNIT_X * offset : Vector2::ZERO);
 	}
 

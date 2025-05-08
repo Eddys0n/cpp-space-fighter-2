@@ -44,4 +44,3 @@ void EnemyShip::Hit(const float damage)
 {
 	Ship::Hit(damage);
 	std::cout << "ouch\n";
-}
